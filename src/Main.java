@@ -1,10 +1,11 @@
-import vista.vista;
+import Data.Abogados;
+import Data.Clientes;
 
 public class Main {
     public static void main(String[] args) {
-        ConexionMySQL conexion = new ConexionMySQL();
-        conexion.guardarCliente("Juan", "Pérez", 12345678, 3111111111);
-        conexion.cerrarConexion();
-
+        Abogados abogado = new Abogados("Pepe", "Amaya", 232323, 33995);
+        Clientes cliente = new Clientes("Juan", "Pérez", 123456, 5551234);
+        cliente.guardarEnBaseDeDatos();
+        abogado.guardarEnBaseDeDatos();
     }
 }
