@@ -1,14 +1,16 @@
 package Data;
 
-import Conexion.ConexionAbogadosMySQL;
-import Conexion.ConexionClientesMySQL;
+import Conexion.ConexionMySQL;
 
 public class Abogados {
+    private int id;
     private String nombre;
+
     private String apellido;
     private int cedula;
     private int tarjetaProfesional;
-    public Abogados(String nombre, String apellido, int cedula, int celular) {
+    public Abogados(int id, String nombre, String apellido, int cedula, int celular) {
+        this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.cedula = cedula;
@@ -18,10 +20,10 @@ public class Abogados {
     // Método para guardar el cliente en la base de datos
     public void guardarEnBaseDeDatos() {
         // Creamos una instancia de ConexionMySQL
-        ConexionAbogadosMySQL conexion = new ConexionAbogadosMySQL();
+        ConexionMySQL conexion = new ConexionMySQL();
 
         // Llamamos al método guardarCliente con los datos del cliente
-        conexion.guardarAbogado(nombre, apellido, cedula, tarjetaProfesional);
+        conexion.guardarAbogado(id, nombre, apellido, cedula, tarjetaProfesional);
 
         // Cerramos la conexión a la base de datos
         conexion.cerrarConexion();

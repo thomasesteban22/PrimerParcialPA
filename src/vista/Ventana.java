@@ -6,7 +6,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-
+import Conexion.ConexionMySQL;
+import Data.*;
 public class Ventana extends JFrame {
 
     private JTabbedPane pestañas;
@@ -16,6 +17,9 @@ public class Ventana extends JFrame {
         pestañas = new JTabbedPane();
 
         // Crear panel de "Registrar Abogado"
+
+
+
         JPanel panelAbogado = new JPanel();
         panelAbogado.setLayout(new BoxLayout(panelAbogado, BoxLayout.PAGE_AXIS));
         JTextField nombreAbogado = new JTextField(20);
@@ -39,6 +43,8 @@ public class Ventana extends JFrame {
                 int cedula = Integer.parseInt(cedulaAbogado.getText());
                 int tarjeta = Integer.parseInt(tarjetaProfesional.getText());
                 // Aquí iría el código para guardar los datos del abogado
+                ConexionMySQL conexion = new ConexionMySQL();
+                Abogados abogados = new Abogados(1, nombre, apellido, cedula, tarjeta);
                 System.out.println("Abogado guardado: " + nombre + " " + apellido + " - " + cedula + " - " + tarjeta);
             }
         });
@@ -142,7 +148,7 @@ public class Ventana extends JFrame {
     }
 
     public static void main(String[] args) {
-
+        Ventana ventana = new Ventana();
 
     }
 }
