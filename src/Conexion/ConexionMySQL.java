@@ -89,6 +89,46 @@ public class ConexionMySQL {
             System.out.println("Error al guardar el abogado en la base de datos: " + e.getMessage());
         }
     }
+    public static void buscarId(String[] args) {
+        ConexionMySQL conexion = new ConexionMySQL();
+
+        try{
+
+            System.out.println("Conectando a la base de datos...");
+            conn = DriverManager.getConnection(conexion);
+
+            System.out.println("Creando statement...");
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT id FROM abogados";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()){
+                int id  = rs.getInt("id");
+                System.out.print("ID: " + id);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        }catch(SQLException se){
+            se.printStackTrace();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+            try{
+                if(stmt!=null)
+                    stmt.close();
+            }catch(SQLException se2){
+            }
+            try{
+                if(conn!=null)
+                    conn.close();
+            }catch(SQLException se){
+                se.printStackTrace();
+            }
+        }
+        System.out.println("¡Adiós!");
+    }
 
     public PreparedStatement prepareStatement(String sql) {
         return PreparedStatement;

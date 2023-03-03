@@ -42,9 +42,9 @@ public class Ventana extends JFrame {
                 String apellido = apellidoAbogado.getText();
                 int cedula = Integer.parseInt(cedulaAbogado.getText());
                 int tarjeta = Integer.parseInt(tarjetaProfesional.getText());
-                // Aquí iría el código para guardar los datos del abogado
                 ConexionMySQL conexion = new ConexionMySQL();
                 Abogados abogados = new Abogados(1, nombre, apellido, cedula, tarjeta);
+                abogados.guardarEnBaseDeDatos();
                 System.out.println("Abogado guardado: " + nombre + " " + apellido + " - " + cedula + " - " + tarjeta);
             }
         });
