@@ -42,7 +42,6 @@ public class ConexionMySQL {
             pstmt.setInt(1, id);
             pstmt.setString(2, fechaDeLaAccion);
             pstmt.setString(3, comentarios);
-
             pstmt.executeUpdate();
             System.out.println("Accion guardada en la base de datos.");
         } catch (SQLException e) {
@@ -54,7 +53,6 @@ public class ConexionMySQL {
         try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.setString(2, tipo);
-
             pstmt.executeUpdate();
             System.out.println("Tipo de proceso guardado en la base de datos.");
         } catch (SQLException e) {
@@ -89,48 +87,9 @@ public class ConexionMySQL {
             System.out.println("Error al guardar el abogado en la base de datos: " + e.getMessage());
         }
     }
-    public static void buscarId(String[] args) {
-        ConexionMySQL conexion = new ConexionMySQL();
 
-        try{
 
-            System.out.println("Conectando a la base de datos...");
-            conn = DriverManager.getConnection(conexion);
-
-            System.out.println("Creando statement...");
-            stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT id FROM abogados";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while(rs.next()){
-                int id  = rs.getInt("id");
-                System.out.print("ID: " + id);
-            }
-            rs.close();
-            stmt.close();
-            conn.close();
-        }catch(SQLException se){
-            se.printStackTrace();
-        }catch(Exception e){
-            e.printStackTrace();
-        }finally{
-            try{
-                if(stmt!=null)
-                    stmt.close();
-            }catch(SQLException se2){
-            }
-            try{
-                if(conn!=null)
-                    conn.close();
-            }catch(SQLException se){
-                se.printStackTrace();
-            }
-        }
-        System.out.println("¡Adiós!");
-    }
-
-    public PreparedStatement prepareStatement(String sql) {
+    public PreparedStatement prepareStatement(String consulta) {
         return PreparedStatement;
     }
 }

@@ -1,24 +1,25 @@
 package vista;
 
 import javax.swing.*;
+import java.sql.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import Conexion.ConexionMySQL;
 import Data.*;
 public class Ventana extends JFrame {
+
 
     private JTabbedPane pestañas;
 
     public Ventana() {
         // Crear pestañas
         pestañas = new JTabbedPane();
-
-        // Crear panel de "Registrar Abogado"
-
-
 
         JPanel panelAbogado = new JPanel();
         panelAbogado.setLayout(new BoxLayout(panelAbogado, BoxLayout.PAGE_AXIS));
@@ -42,9 +43,16 @@ public class Ventana extends JFrame {
                 String apellido = apellidoAbogado.getText();
                 int cedula = Integer.parseInt(cedulaAbogado.getText());
                 int tarjeta = Integer.parseInt(tarjetaProfesional.getText());
-                ConexionMySQL conexion = new ConexionMySQL();
-                Abogados abogados = new Abogados(1, nombre, apellido, cedula, tarjeta);
-                abogados.guardarEnBaseDeDatos();
+                Abogados abogados = null;
+                try {
+                    int  id = abogados.generarIdAbogado();
+                    abogados = new Abogados(id, nombre, apellido, cedula, tarjeta);
+                    abogados.guardarEnBaseDeDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println("Abogado guardado: " + nombre + " " + apellido + " - " + cedula + " - " + tarjeta);
             }
         });
@@ -76,30 +84,53 @@ public class Ventana extends JFrame {
                 String apellido = apellidoCliente.getText();
                 int cedula = Integer.parseInt(cedulaCliente.getText());
                 int celular = Integer.parseInt(celularCliente.getText());
-                // Aquí iría el código para guardar los datos del cliente
+                Clientes cliente = null;
+                try {
+                    int id = cliente.generarIdCliente();
+                    cliente = new Clientes(id, nombre,apellido, cedula, celular );
+                    cliente.guardarEnBaseDeDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println("Cliente guardado: " + nombre + " " + apellido + " - " + cedula + " - " + celular);
             }
         });
         panelCliente.add(guardarCliente);
 
-        // Agregar panel de "Registrar Cliente" a la pestaña
+
         pestañas.addTab("Registrar Cliente", panelCliente);
-        // Crear panel de "Registrar Acciones"
         JPanel panelAcciones = new JPanel();
         panelAcciones.setLayout(new BoxLayout(panelAcciones, BoxLayout.PAGE_AXIS));
+        int buscarCliente = new JTextField(20);
+
         JTextField fechaAcciones = new JTextField(20);
         JTextField comentariosAcciones = new JTextField(20);
+        panelAcciones.add(new JLabel("Buscar cliente"));
+        panelAcciones.add(buscarCliente);
+        JButton guardarBusquedaCliente = new JButton("Buscar");
+        panelAcciones.add(guardarBusquedaCliente);
         panelAcciones.add(new JLabel("Fecha:"));
         panelAcciones.add(fechaAcciones);
         panelAcciones.add(new JLabel("Comentarios:"));
         panelAcciones.add(comentariosAcciones);
         JButton guardarAcciones = new JButton("Guardar");
+        guardarBusquedaCliente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Clientes cliente = null;
+                Clientes busquedaCliente = null;
+
+            }
+        });
         guardarAcciones.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LocalDate fecha = LocalDate.parse(fechaAcciones.getText());
+                String fecha = fechaAcciones.getText();
                 String comentarios = comentariosAcciones.getText();
-                // Aquí iría el código para guardar los datos de la acción
+                Acciones accion = new Acciones(1, fecha,comentarios );
+                accion.guardarEnBaseDeDatos();
                 System.out.println("Acción guardada: " + fecha + " - " + comentarios);
             }
         });
@@ -111,24 +142,28 @@ public class Ventana extends JFrame {
         // Crear panel de "Tipo de Proceso"
         JPanel panelProceso = new JPanel();
         panelProceso.setLayout(new BoxLayout(panelProceso, BoxLayout.PAGE_AXIS));
-        JTextField idCaso = new JTextField(20);
         JTextField tipoProceso = new JTextField(20);
-        JTextField diaInicio = new JTextField(20);
-        panelProceso.add(new JLabel("ID del Caso:"));
-        panelProceso.add(idCaso);
         panelProceso.add(new JLabel("Tipo de Proceso:"));
         panelProceso.add(tipoProceso);
-        panelProceso.add(new JLabel("Día de Inicio:"));
-        panelProceso.add(diaInicio);
         JButton guardarProceso = new JButton("Guardar");
         guardarProceso.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int id = Integer.parseInt(idCaso.getText());
                 String tipo = tipoProceso.getText();
-                LocalDate dia = LocalDate.parse(diaInicio.getText());
-                // Aquí iría el código para guardar los datos del proceso
-                System.out.println("Proceso guardado: " + id + " - " + tipo + " - " + dia);
+                TipoDeProceso proceso = null;
+                int id = 0;
+                try {
+                    id = proceso.generarIdProceso();
+                    proceso = new TipoDeProceso(id, tipo);
+                    proceso.guardarEnBaseDeDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (ClassNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+
+                System.out.println("Proceso guardado: " + id + " - " + tipo);
             }
         });
         panelProceso.add(guardarProceso);
@@ -148,8 +183,11 @@ public class Ventana extends JFrame {
     }
 
     public static void main(String[] args) {
+        //buscarAbogado();
         Ventana ventana = new Ventana();
 
     }
+
+
 }
 
