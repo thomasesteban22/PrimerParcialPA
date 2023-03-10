@@ -4,11 +4,11 @@ import Conexion.ConexionMySQL;
 import java.sql.*;
 
 public class Clientes {
-    private int id;
-    private String nombre;
-    private String apellido;
-    private int cedula;
-    private int celular;
+    public int id;
+    public String nombre;
+    public String apellido;
+    public int cedula;
+    public int celular;
 
     // Constructor de la clase
     public Clientes(int id, String nombre, String apellido, int cedula, int celular) {
@@ -20,35 +20,41 @@ public class Clientes {
     }
 
     public static void main(String[] args) {
-        buscarCliente(1);
+        buscarCliente(123);
     }
 
-    public static Abogados buscarCliente(int id) {
+    public static Clientes buscarCliente(int cedulaB) {
         String url = "jdbc:mysql://localhost:3306/magnaabogados";
         String usuario = "root";
         String contraseña = "";
         try (Connection conexion = DriverManager.getConnection(url, usuario, contraseña)) {
-            String consulta = "SELECT * FROM abogados WHERE id = ?";
+            String consulta = "SELECT * FROM clientes WHERE cedula = ?";
             PreparedStatement statement = conexion.prepareStatement(consulta);
-            statement.setInt(1, id);
+            statement.setInt(1, cedulaB);
             ResultSet resultado = statement.executeQuery();
             if (resultado.next()) {
+                int id = resultado.getInt("id");
+
                 String nombre = resultado.getString("nombre");
-                System.out.println(nombre);
+
                 String apellido = resultado.getString("apellido");
-                System.out.println(apellido);
+
                 int cedula = resultado.getInt("cedula");
-                System.out.println(cedula);
+
                 int celular = resultado.getInt("celular");
-                System.out.println(celular);
-                return new Abogados(id, nombre, apellido, cedula, celular);
+
+
+                return new Clientes(id, nombre, apellido, cedula, celular);
             }
         } catch (SQLException e) {
-            System.err.println("Error al obtener el último valor de la columna 'id': " + e.getMessage());
+            System.err.println("Error: " + e.getMessage());
         }
         return null;
     }
 
+    public static void editarCliente(){
+
+    }
 
 
 
